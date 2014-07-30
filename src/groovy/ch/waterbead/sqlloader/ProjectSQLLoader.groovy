@@ -1,0 +1,19 @@
+package ch.waterbead.sqlloader
+
+import ch.waterbead.domain.Project
+import groovy.sql.Sql
+
+class ProjectSQLLoader extends SQLLoader {
+	private static final SQL = "INSERT INTO PROJETS (id, nom) VALUES (:id, :nom)"
+        
+    def load(List<Project> projects) {
+        sql.withBatch(SQL) {
+            ps ->
+            projects.each() {
+                Project p ->
+                ps.addBatch(id : p.id, nom : p.name)
+            }
+        }
+    }
+}
+
