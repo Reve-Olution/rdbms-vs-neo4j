@@ -1,8 +1,9 @@
+apply plugin: 'application'
 apply plugin: 'groovy'
 
 sourceCompatibility = '1.8'
 
-mainClass = "ch.waterbead.main.Main"
+mainClassName = "ch.waterbead.main.Main"
 
 repositories {
     mavenCentral()
