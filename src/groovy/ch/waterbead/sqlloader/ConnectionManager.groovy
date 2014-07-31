@@ -1,14 +1,16 @@
 package ch.waterbead.sqlloader
 
+import ch.waterbead.config.Config
 import groovy.sql.Sql;
 
 class ConnectionManager {
-    //TODO: Should be a parameter
-    static final Sql sql = Sql.newInstance("jdbc:mariadb://localhost:3306/population?createDatabaseIfNotExist=true",'root','','org.mariadb.jdbc.Driver')
-    static {
-        sql.getConnection().setAutoCommit(false);
-    }
+    static Sql sql = null;
+    
     static Sql getSql() {
+        if(sql==null) {
+        sql = Sql.newInstance(Config.rdbmsUrl,Config.rdbmsUser,Config.rdbmsPassword,Config.rdbmsDriver)    
+        }
+        sql.getConnection().setAutoCommit(false);        
         return sql;
     }
 }

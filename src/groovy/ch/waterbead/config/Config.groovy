@@ -3,8 +3,18 @@ package ch.waterbead.config
 class Config {
     static final DEBUG = true;
     
-    static final LoaderType loaderType = LoaderType.MARIADB
+    /** Generation parameters */
+    static int population = 1000;
     
+    static boolean mustNeo4JPopulated = false
+    static boolean mustRDBMSPopulated = false;
+    
+    static String rdbmsUrl = "jdbc:mariadb://localhost:3306/population?createDatabaseIfNotExist=true"
+    static String rdbmsUser = "root"
+    static String rdbmsPassword = ""
+    static String rdbmsDriver = "org.mariadb.jdbc.Driver"
+    
+    static String neo4JPath = "/home/geiser/test.db"
     
     static final String FILE_FIRST_NAMES = 'firstnames.csv'
     static final String FILE_LAST_NAMES = 'lastnames.csv'
@@ -27,8 +37,5 @@ class Config {
    /** Maximum birthday date for a person */
    static final MIN_BIRTHDAY_YEAR = 1950
    static final MAX_BIRTHDAY_YEAR = 1995
-   
-    /** Generation parameters */
-    static final int EMPLOYES_TO_GENERATE = 1000;
 }
 

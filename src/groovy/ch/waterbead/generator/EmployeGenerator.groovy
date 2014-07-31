@@ -14,7 +14,7 @@ class EmployeGenerator implements Generator<Employe> {
         List groups = FileLoader.load(Config.FILE_GROUPS)
         List projects = FileLoader.load(Config.FILE_PROJECTS)
 
-        Config.EMPLOYES_TO_GENERATE.times {
+        Config.population.times {
             no ->
             
             int id = no+1

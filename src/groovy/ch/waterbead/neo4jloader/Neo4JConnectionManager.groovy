@@ -5,6 +5,7 @@ import org.neo4j.graphdb.Label
 import org.neo4j.graphdb.Relationship
 import org.neo4j.graphdb.Transaction
 import org.neo4j.graphdb.factory.GraphDatabaseFactory
+import ch.waterbead.config.Config
 import org.neo4j.graphdb.DynamicLabel
 
 class Neo4JConnectionManager {
@@ -13,7 +14,7 @@ class Neo4JConnectionManager {
     static boolean openTransaction = false
     
     static {
-        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase("/home/geiser/test.db")
+        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(Config.neo4JPath)
     }
     
     static GraphDatabaseService getGraph() {
