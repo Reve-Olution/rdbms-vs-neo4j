@@ -6,11 +6,11 @@ import groovy.sql.Sql;
 class ConnectionManager {
     static Sql sql = null;
     
-    static Sql getSql() {
+    static synchronized Sql getSql() {
         if(sql==null) {
-        sql = Sql.newInstance(Config.rdbmsUrl,Config.rdbmsUser,Config.rdbmsPassword,Config.rdbmsDriver)    
+            sql = Sql.newInstance(Config.rdbmsUrl,Config.rdbmsUser,Config.rdbmsPassword,Config.rdbmsDriver)    
+            sql.getConnection().setAutoCommit(false);        
         }
-        sql.getConnection().setAutoCommit(false);        
         return sql;
     }
 }

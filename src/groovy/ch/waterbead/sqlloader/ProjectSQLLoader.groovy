@@ -1,5 +1,6 @@
 package ch.waterbead.sqlloader
 
+import ch.waterbead.config.Config
 import ch.waterbead.domain.Project
 import groovy.sql.Sql
 
@@ -11,6 +12,9 @@ class ProjectSQLLoader extends SQLLoader {
             ps ->
             projects.each() {
                 Project p ->
+                if(Config.DEBUG) {
+                    println p.id + " " + p.name
+                }
                 ps.addBatch(id : p.id, nom : p.name)
             }
         }
