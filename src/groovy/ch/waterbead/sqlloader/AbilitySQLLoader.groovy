@@ -1,5 +1,6 @@
 package ch.waterbead.sqlloader
 
+import ch.waterbead.config.Config
 import ch.waterbead.domain.Ability
 import groovy.sql.Sql
 
@@ -11,6 +12,9 @@ class AbilitySQLLoader extends SQLLoader {
             ps ->
             abilities.each() {
                 Ability a ->
+                if(Config.DEBUG) {
+                    println a.id + " " + a.name
+                }
                 ps.addBatch(id : a.id, nom : a.name)
             }
         }
