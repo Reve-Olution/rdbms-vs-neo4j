@@ -10,9 +10,9 @@ import java.sql.Connection
 
 class EmployeSQLLoader extends SQLLoader {
     private static final SQL_EMPLOYES = "INSERT INTO EMPLOYES (id, nom, prenom, anneenaissance) VALUES (:id, :nom, :prenom, :anneenaissance)"
-    private static final SQL_EMPLOYES_COMPETENCES = "INSERT INTO EMPLOYES_COMPETENCES (id, idEmployee, idCompetence, note) VALUES (:id, :idEmploye, :idCompetence, :note)"
-    private static final SQL_EMPLOYES_GROUPES = "INSERT INTO EMPLOYES_GROUPES (idEmployee, idGroupe) VALUES (:idEmployee, :idGroupe)"
-    private static final SQL_EMPLOYES_PROJETS = "INSERT INTO EMPLOYES_PROJETS (idEmployee, idProjet) VALUES (:idEmployee, idProjet)"
+    private static final SQL_EMPLOYES_COMPETENCES = "INSERT INTO EMPLOYES_COMPETENCES (id, idEmploye, idCompetence, note) VALUES (:id, :idEmploye, :idCompetence, :note)"
+    private static final SQL_EMPLOYES_GROUPES = "INSERT INTO EMPLOYES_GROUPES (idEmploye, idGroupe) VALUES (:idEmploye, :idGroupe)"
+    private static final SQL_EMPLOYES_PROJETS = "INSERT INTO EMPLOYES_PROJETS (idEmploye, idProjet) VALUES (:idEmploye, idProjet)"
     def load(List<Employe> people) {
         sql.withBatch(1,SQL_EMPLOYES) {
             ps ->
@@ -36,7 +36,7 @@ class EmployeSQLLoader extends SQLLoader {
                     psProjets ->
                     p.projects.each() {
                         Project project ->
-                        psProjets.addBatch(idEmployee : p.id, idProjet : project.id)
+                        psProjets.addBatch(idEmploye : p.id, idProjet : project.id)
                     }
                 }
                 
@@ -44,7 +44,7 @@ class EmployeSQLLoader extends SQLLoader {
                     psGroups ->
                     p.groups.each() {
                         Group group ->
-                        psGroups.addBatch(idEmployee : p.id, idGroupe : group.id)
+                        psGroups.addBatch(idEmploye : p.id, idGroupe : group.id)
                     }
                 }
                 

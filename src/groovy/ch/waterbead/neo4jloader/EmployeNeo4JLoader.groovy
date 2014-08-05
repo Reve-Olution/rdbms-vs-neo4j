@@ -1,5 +1,6 @@
 package ch.waterbead.neo4jloader
 
+import ch.waterbead.config.Config
 import ch.waterbead.domain.Employe
 import org.neo4j.graphdb.DynamicLabel
 import org.neo4j.graphdb.GraphDatabaseService
@@ -18,8 +19,13 @@ class EmployeNeo4JLoader extends Neo4JLoader {
 //        graphDb.schema().constraintFor(LABEL_PROJECT).assertPropertyIsUnique(PROPERTY_PROJECT_ID)
 //        graphDb.schema().constraintFor(LABEL_ABILITY).assertPropertyIsUnique(PROPERTY_ABILITY_ID)
         
+        beginTransaction()
         employes.each() {
             Employe e ->
+            
+            if(Config.DEBUG) {
+                println "${e.id} : ${e.firstname}"
+            }
             Node node = graphDb.createNode(Neo4JRegistry.LABEL_EMPLOYE)
             node.setProperty(Neo4JRegistry.PROPERTY_EMPLOYE_ID, e.id);
             node.setProperty(Neo4JRegistry.PROPERTY_EMPLOYE_LASTNAME, e.lastname);
@@ -51,6 +57,7 @@ class EmployeNeo4JLoader extends Neo4JLoader {
                 }
             }
         }
+        commitTransaction()
     }
 }
 

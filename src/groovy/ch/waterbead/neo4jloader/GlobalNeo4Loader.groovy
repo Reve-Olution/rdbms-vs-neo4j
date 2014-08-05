@@ -12,14 +12,16 @@ class GlobalNeo4Loader {
         GroupNeo4JLoader gloader = new GroupNeo4JLoader()
         EmployeNeo4JLoader eloader = new EmployeNeo4JLoader()
         
-        Neo4JConnectionManager.beginTransaction()
+        def subLists = employes.collate(1000)
         
         aloader.load(abilities)
         ploader.load(projects)
         gloader.load(groups)
-        eloader.load(employes)
         
-        Neo4JConnectionManager.commitTransaction()
+        subLists.each() {
+            list ->
+            eloader.load(list)
+        }
     }
 }
 

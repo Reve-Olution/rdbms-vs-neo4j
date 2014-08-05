@@ -35,7 +35,7 @@ class ConfigLoader {
         def rdbmsPassword = properties.get(RDBMS_PASSWORD)
         def rdbmsDriver = properties.get(RDBMS_DRIVER)
         def neo4jPath = properties.get(NEO4J_PATH)
-        def population = properties.get(POPULATION)
+        def population = Integer.valueOf(properties.get(POPULATION))
 
         if(!rdbmsUrl && !neo4jPath) {
             println "Please defined an '${RDBMS_URL}' or/and a '${NEO4J_PATH}' on the config.properties"
@@ -57,7 +57,7 @@ class ConfigLoader {
             Config.mustNeo4JPopulated = true
         }
 
-        if(population) {
+        if(!population) {
             println "No '${POPULATION}' defined, the default value of ${Config.population}  will be used"
         } else {
             Config.population = population

@@ -14,12 +14,14 @@ import org.neo4j.graphdb.schema.Schema
 
 class ProjectNeo4JLoader extends Neo4JLoader{
     def load(List<Project> projects) {
+        beginTransaction()
         projects.each() {
             Project p->
             Node node = graphDb.createNode(Neo4JRegistry.LABEL_PROJECT)
             node.setProperty(Neo4JRegistry.PROPERTY_GROUP_ID, p.id);
             node.setProperty(Neo4JRegistry.PROPERTY_GROUP_NAME, p.name);
         }
+        commitTransaction()
     }
 }
 
