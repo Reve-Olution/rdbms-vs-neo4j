@@ -15,6 +15,7 @@ dependencies {
     compile 'org.jumpmind.symmetric.jdbc:mariadb-java-client:1.1.1'
     compile 'com.google.guava:guava:17.0'
     compile 'org.neo4j:neo4j:2.1.2'
+    compile 'org.mybatis:mybatis:3.2.7'
     compile localGroovy()
 }
 

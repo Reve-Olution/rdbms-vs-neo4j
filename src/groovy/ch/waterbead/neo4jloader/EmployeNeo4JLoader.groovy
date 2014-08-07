@@ -14,11 +14,6 @@ import org.neo4j.graphdb.schema.Schema
 class EmployeNeo4JLoader extends Neo4JLoader {
     
     def load(List<Employe> employes) {
-//        graphDb.schema().constraintFor(LABEL_EMPLOYE).assertPropertyIsUnique(PROPERTY_EMPLOYE_ID).create()
-//        graphDb.schema().constraintFor(LABEL_GROUP).assertPropertyIsUnique(PROPERTY_GROUP_ID)
-//        graphDb.schema().constraintFor(LABEL_PROJECT).assertPropertyIsUnique(PROPERTY_PROJECT_ID)
-//        graphDb.schema().constraintFor(LABEL_ABILITY).assertPropertyIsUnique(PROPERTY_ABILITY_ID)
-        
         beginTransaction()
         employes.each() {
             Employe e ->

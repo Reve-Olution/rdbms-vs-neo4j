@@ -1,4 +1,4 @@
-package ch.waterbead.config
+     package ch.waterbead.config
 
 class Config {
     static final DEBUG = true;
@@ -29,10 +29,10 @@ class Config {
    static final MAX_GROUPS = 3
    
    /** Maximum number of abilities for a person */
-   static final MAX_ABILITIES = 10
+   static final MAX_ABILITIES = 2
    
    /** Maximum number of projects for a person */
-   static final MAX_PROJECTS = 4
+   static final MAX_PROJECTS = 2
    
    /** Maximum birthday date for a person */
    static final MIN_BIRTHDAY_YEAR = 1950

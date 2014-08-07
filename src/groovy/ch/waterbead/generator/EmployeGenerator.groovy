@@ -23,20 +23,20 @@ class EmployeGenerator implements Generator<Employe> {
             int randomYear = RandomGenerator.get(Config.MIN_BIRTHDAY_YEAR, Config.MAX_BIRTHDAY_YEAR)
             Employe employe = new Employe(id : id, firstname : firstnames[randomFirstname], lastname : lastnames[randomLastname], yearOfBirthDay :  randomYear);
             
-            int randomNumberOfAbilities = RandomGenerator.get(Config.MAX_ABILITIES)
+            int randomNumberOfAbilities = RandomGenerator.getForIndexOf0(Config.MAX_ABILITIES)
             randomNumberOfAbilities.times {
                 int randomAbility = RandomGenerator.getForIndexOf0(abilities.size())
                 int randomScoreForAbility = RandomGenerator.get(Config.MAX_SCORE)
                 employe.addAbility(randomAbility, randomScoreForAbility)
             }
             
-            int randomNumberOfGroups = RandomGenerator.get(Config.MAX_GROUPS)
+            int randomNumberOfGroups = RandomGenerator.getForIndexOf0(Config.MAX_GROUPS)
             randomNumberOfGroups.times {
                 int randomGroup = RandomGenerator.getForIndexOf0(groups.size())
                 employe.addGroup(randomGroup)
             }
             
-            int randomNumberOfProjects = RandomGenerator.get(Config.MAX_PROJECTS)
+            int randomNumberOfProjects = RandomGenerator.getForIndexOf0(Config.MAX_PROJECTS)
             randomNumberOfProjects.times {
                 int randomProject = RandomGenerator.getForIndexOf0(projects.size())
                 employe.addProject(randomProject)

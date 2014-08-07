@@ -11,6 +11,7 @@ class GlobalNeo4Loader {
         ProjectNeo4JLoader ploader = new ProjectNeo4JLoader()
         GroupNeo4JLoader gloader = new GroupNeo4JLoader()
         EmployeNeo4JLoader eloader = new EmployeNeo4JLoader()
+        CustomNeo4JLoader cloader = new CustomNeo4JLoader();
         
         def subLists = employes.collate(1000)
         
@@ -22,6 +23,8 @@ class GlobalNeo4Loader {
             list ->
             eloader.load(list)
         }
+        
+        cloader.addConstraints()
     }
 }
 
