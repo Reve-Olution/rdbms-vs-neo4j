@@ -1,0 +1,34 @@
+apply plugin: 'application'
+apply plugin: 'groovy'
+
+sourceCompatibility = '1.8'
+
+mainClassName = "ch.waterbead.main.Main"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+    compile 'org.codehaus.groovy:groovy-all:2.3.3'
+    compile 'org.jumpmind.symmetric.jdbc:mariadb-java-client:1.1.1'
+    compile 'com.google.guava:guava:17.0'
+    compile 'org.neo4j:neo4j:2.1.2'
+    compile 'org.mybatis:mybatis:3.2.7'
+    compile localGroovy()
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/groovy']
+        }
+    }
+
+    test {
+        groovy {
+            srcDirs = ['test/groovy']
+        }
+    }
+}
