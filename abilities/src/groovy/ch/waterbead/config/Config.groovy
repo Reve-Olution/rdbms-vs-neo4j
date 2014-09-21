@@ -1,4 +1,4 @@
-     package ch.waterbead.config
+package ch.waterbead.config
 
 class Config {
     static final DEBUG = true;

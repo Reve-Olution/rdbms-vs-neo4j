@@ -2,6 +2,7 @@ apply plugin: 'groovy'
 apply plugin: 'application'
 
 mainClassName = 'ch.waterbead.Main'
+mainClass = 'ch.waterbead.Main'
 
 sourceCompatibility = '1.8'
 
@@ -12,4 +13,18 @@ repositories {
 dependencies {
     compile project(':common')
     testCompile group: 'junit', name: 'junit', version: '4.10'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/groovy']
+        }
+    }
+
+    test {
+        groovy {
+            srcDirs = ['test/groovy']
+        }
+    }
 }
