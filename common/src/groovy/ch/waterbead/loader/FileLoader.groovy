@@ -1,8 +1,5 @@
 package ch.waterbead.loader
 
-import ch.waterbead.config.Config
-
-
 class FileLoader {
     private static cacheFile = [:]
     

@@ -8,8 +8,8 @@ class Neo4JRegistry {
 	   
     public static final EMPLOYE = "Employe"
     public static final ABILITY = "Competence"
-    public static final GROUP = "Group"
-    public static final PROJECT = "Project"
+    public static final GROUP = "Groupe"
+    public static final PROJECT = "Projet"
     
     public static final Label LABEL_EMPLOYE= new DynamicLabel(EMPLOYE);
     public static final Label LABEL_ABILITY = new DynamicLabel(ABILITY);

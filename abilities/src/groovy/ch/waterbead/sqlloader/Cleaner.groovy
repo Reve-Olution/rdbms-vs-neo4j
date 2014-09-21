@@ -2,11 +2,12 @@ package ch.waterbead.sqlloader
 
 import ch.waterbead.config.Config
 import groovy.sql.Sql
+import java.sql.SQLException
 import org.apache.ibatis.jdbc.ScriptRunner
 
 class Cleaner  {
-        def static tablesToClean = ["EMPLOYES_GROUPES","EMPLOYES_COMPETENCES","EMPLOYES_PROJETS","EMPLOYES","GROUPES","COMPETENCES","PROJETS"]
-	def static clean() {
+    def static tablesToClean = ["EMPLOYES_GROUPES","EMPLOYES_COMPETENCES","EMPLOYES_PROJETS","EMPLOYES","GROUPES","COMPETENCES","PROJETS"]
+    def static clean() {
         Sql sql = ConnectionManager.getSql()
             
         if(Config.DEBUG) {
@@ -15,7 +16,11 @@ class Cleaner  {
         
         tablesToClean.each() {
             table->
-            sql.execute("DROP TABLE " + table)
+            try {
+                sql.execute("DROP TABLE " + table)
+            } catch(SQLException ex) {
+                println ex.message;
+            }
         }
             
         ScriptRunner sr = new ScriptRunner(sql.connection);
