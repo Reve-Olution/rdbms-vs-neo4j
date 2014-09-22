@@ -33,9 +33,9 @@ def projects = pg.generate()
 def groups = gg.generate()
 def employes = eg.generate()
 
-if(Config.mustRDBMSPopulated) {
+if(ConfigLoader.mustRDBMSPopulated) {
     GlobalSQLLoader.load(abilities, projects, groups, employes)
 }
-if(Config.mustNeo4JPopulated) {
+if(ConfigLoader.mustNeo4JPopulated) {
     GlobalNeo4Loader.load(abilities, projects, groups, employes)
 }
