@@ -2,6 +2,7 @@ package ch.waterbead
 
 import ch.waterbead.generator.PersonGenerator
 
-def generator = new PersonGenerator()
-generator.generate()
+def personGenerator = new PersonGenerator()
+
+def personnes = personGenerator.generate()
 

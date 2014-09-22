@@ -3,19 +3,7 @@ package ch.waterbead.config
 class Config {
     static final DEBUG = true;
     
-    /** Generation parameters */
-    static int population = 1000;
-    
-    static boolean mustNeo4JPopulated = false
-    static boolean mustRDBMSPopulated = false;
-    
-    static String rdbmsUrl = "jdbc:mariadb://localhost:3306/population?createDatabaseIfNotExist=true"
-    static String rdbmsUser = "root"
-    static String rdbmsPassword = ""
-    static String rdbmsDriver = "org.mariadb.jdbc.Driver"
-    
-    static String neo4JPath = "/home/geiser/test.db"
-    
+    /** Population files */
     static final String FILE_FIRST_NAMES = 'firstnames.csv'
     static final String FILE_LAST_NAMES = 'lastnames.csv'
     static final String FILE_ABILITIES = 'abilities.csv'

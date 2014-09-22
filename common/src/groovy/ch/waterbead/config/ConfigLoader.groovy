@@ -1,6 +1,16 @@
 package ch.waterbead.config
 
+import ch.waterbead.neo4jloader.Neo4JConnectionManager
+import ch.waterbead.sqlloader.ConnectionManager
+
 class ConfigLoader {
+    /** Generation parameters */
+    static int population = 1000;
+    
+    /** Flags that determine which databases have to be populated */
+    static boolean mustNeo4JPopulated = false
+    static boolean mustRDBMSPopulated = false;
+    
     static final RDBMS_USER = "rdbmsUser"
     static final RDBMS_PASSWORD = "rdbmsPassword"
     static final RDBMS_URL = "rdbmsUrl"
@@ -11,6 +21,7 @@ class ConfigLoader {
     static final POPULATION = "population"
     
     static final CONFIG_PROPERTIES = "config.properties"
+    
     static final DOCUMENTATION = "http://localhost.ch"
     
     static def load() {
@@ -44,28 +55,33 @@ class ConfigLoader {
         if(!rdbmsUrl) {
             println "${RDBMS_URL} not defined, no RDBMS database is going to be popoulate"
         } else {
-            Config.rdbmsUrl = rdbmsUrl;
-            Config.rdbmsUser = rdbmsUser;
-            Config.rdbmsPassword = rdbmsPassword;
-            Config.rdbmsDriver = rdbmsDriver;
-            Config.mustRDBMSPopulated = true
+            mustRDBMSPopulated = true
+            initConnectionManager(rdbmsUrl, rdbmsUser, rdbmsPassword, rdbmsDriver)
         }
         if(!neo4jPath) {
             println "${NEO4J_PATH} not defined, no Neo4J database is going to be populate"
         } else {
-            Config.neo4JPath = neo4jPath
-            Config.mustNeo4JPopulated = true
+            mustNeo4JPopulated = true
+            initGraphDaatabase(neo4jPath)
         }
 
         if(!population) {
-            println "No '${POPULATION}' defined, the default value of ${Config.population}  will be used"
+            println "No '${POPULATION}' defined, the default value of ${population}  will be used"
         } else {
-            Config.population = population
+            population = population
         }
     }
     
     static def quit() {
         System.exit(0)
+    }
+    
+    static def initConnectionManager(def url, def user, def password, def driver) {
+        ConnectionManager.initSQL(url, user, password, driver)
+    }
+    
+    static def initGraphDaatabase(def neo4JPath) {
+        Neo4JConnectionManager.initGraphDatabase(neo4JPath)
     }
 }
 

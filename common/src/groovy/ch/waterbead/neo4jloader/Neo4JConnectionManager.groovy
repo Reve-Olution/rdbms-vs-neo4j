@@ -5,17 +5,12 @@ import org.neo4j.graphdb.Label
 import org.neo4j.graphdb.Relationship
 import org.neo4j.graphdb.Transaction
 import org.neo4j.graphdb.factory.GraphDatabaseFactory
-import ch.waterbead.config.Config
 import org.neo4j.graphdb.DynamicLabel
 
 class Neo4JConnectionManager {
     static GraphDatabaseService graphDb
     static Transaction transaction
     static boolean openTransaction = false
-    
-    static {
-        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(Config.neo4JPath)
-    }
     
     static GraphDatabaseService getGraph() {
         return graphDb;
@@ -33,6 +28,12 @@ class Neo4JConnectionManager {
         transaction.success();
         transaction.finish();
         openTransaction = false;
+    }
+    
+    static initGraphDatabase(def neo4JPath) {
+        if(graphDb!=null)
+          throw new IllegalAccessError("initGraphDatabase already called")
+        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(neo4JPath)
     }
 }
 
