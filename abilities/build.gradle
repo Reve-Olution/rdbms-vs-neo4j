@@ -4,6 +4,7 @@ apply plugin: 'groovy'
 sourceCompatibility = '1.8'
 
 mainClassName = "ch.waterbead.main.Main"
+mainClass = "ch.waterbead.main.Main"
 
 repositories {
     mavenCentral()

@@ -4,7 +4,7 @@ import ch.waterbead.config.Config
 
 class GlobalNeo4Loader {
     def static load(def abilities, def projects, def groups, def employes) {
-        File file = new File(Config.neo4JPath);
+        File file = new File("/home/geiser/test.db");
         file.deleteDir();
         
         AbilityNeo4JLoader aloader = new AbilityNeo4JLoader()
