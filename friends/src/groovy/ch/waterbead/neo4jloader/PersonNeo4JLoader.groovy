@@ -1,6 +1,8 @@
 package ch.waterbead.neo4jloader
 
 import ch.waterbead.domain.Person
+import ch.waterbead.generator.RandomGenerator
+import ch.waterbead.config.Config
 import org.neo4j.graphdb.DynamicLabel
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.Label
@@ -13,26 +15,19 @@ class PersonNeo4JLoader extends Neo4JLoader{
     Map<Long, Node>  map = [:]
     
     def load(LinkedList<Person> people) {       
-        addConstraints()
         populatePeople(people);
         createRelationships(people);
+        addConstraints()
     }
     
     private def addConstraints() {
         beginTransaction()
         graphDb.schema().indexFor(Neo4JRegistry.LABEL_PERSONNE).on(Neo4JRegistry.PROPERTY_PERSONNE_ID).create()
         commitTransaction()
-                
     }
     
     private def populatePeople(def people) {
-        println "Prepared sublists"
-        def subLists = people.collate(100000)
-        println "Sublists prepared"
-        subLists.each() {
-            list -> 
-            loadPeople(list)
-        }
+        loadPeople(people)
     }
     
     def loadPeople(def people) {
@@ -40,6 +35,9 @@ class PersonNeo4JLoader extends Neo4JLoader{
         beginTransaction()
         people.each() {
             Person p->
+            if(p.id % 10000 == 0) {
+                println "Inserting people : ${p.id}"
+            }
             Node node = graphDb.createNode(Neo4JRegistry.LABEL_PERSONNE)
             node.setProperty(Neo4JRegistry.PROPERTY_PERSONNE_ID, p.id);
             node.setProperty(Neo4JRegistry.PROPERTY_PERSONNE_LASTNAME, p.name);
@@ -54,6 +52,7 @@ class PersonNeo4JLoader extends Neo4JLoader{
     
     def createRelationships(def people) {
         beginTransaction()
+        int nbPeople = people.size()
         while(!people.empty) {
             Person p = people.removeFirst();
             if(p.id % 10000 == 0) {
@@ -61,10 +60,12 @@ class PersonNeo4JLoader extends Neo4JLoader{
                 beginTransaction();
             }
             def nodePerson = map.get(p.id)
-            if(p.id%100==0)
+            if(p.id%100==0) {
                 println "Create relationship for person ${p.id}"
-            p.friends.each() {
-                Long friendId ->
+                
+            }
+            Config.NB_FRIENDS.times() {
+                Long friendId = RandomGenerator.getForIndexOf0(nbPeople)
                 def nodeFriend = map.get(friendId)
                 nodePerson.createRelationshipTo(nodeFriend, Neo4JRegistry$RelationPersonne.FRIEND_OF)
             }

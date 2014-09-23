@@ -4,7 +4,7 @@ apply plugin: 'application'
 mainClassName = 'ch.waterbead.Main'
 mainClass = 'ch.waterbead.Main'
 
-applicationDefaultJvmArgs = ["-Xmx4024m","-Xms256m"]
+applicationDefaultJvmArgs = ["-Xmx1526m","-Xms256m","-server", "-XX:+UseConcMarkSweepGC"]
 
 sourceCompatibility = '1.8'
 
