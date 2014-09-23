@@ -12,49 +12,30 @@ import org.neo4j.graphdb.schema.Schema
 class PersonNeo4JLoader extends Neo4JLoader{
     Map<Long, Node>  map = [:]
     
-    def load(List<Person> people) {       
+    def load(LinkedList<Person> people) {       
+        addConstraints()
+        populatePeople(people);
+        createRelationships(people);
+    }
+    
+    private def addConstraints() {
         beginTransaction()
         graphDb.schema().indexFor(Neo4JRegistry.LABEL_PERSONNE).on(Neo4JRegistry.PROPERTY_PERSONNE_ID).create()
         commitTransaction()
-        
-        def subLists = people.collate(10000)
+                
+    }
+    
+    private def populatePeople(def people) {
+        println "Prepared sublists"
+        def subLists = people.collate(100000)
         println "Sublists prepared"
         subLists.each() {
             list -> 
-            loadPart(list)
+            loadPeople(list)
         }
-        
-        beginTransaction()
-        people.each() {
-            Person p ->
-            if(p.id % 10000 == 0) {
-                commitTransaction();
-                beginTransaction();
-            }
-            //def nodePerson = findNodePersonById(p.id)
-            def nodePerson = map.get(p.id)
-            if(p.id%100==0)
-                println "Create relationship for person ${p.id}"
-            p.friends.each() {
-                Person friend ->
-                //def nodeFriend = findNodePersonById(friend.id)
-                def nodeFriend = map.get(friend.id)
-                nodePerson.createRelationshipTo(nodeFriend, Neo4JRegistry$RelationPersonne.FRIEND_OF)
-            }
-        }
-        commitTransaction()
     }
-        
-    Node findNodePersonById(long id) {
-        Node node = null;
-        graphDb.findNodesByLabelAndProperty(Neo4JRegistry.LABEL_PERSONNE, Neo4JRegistry.PROPERTY_PERSONNE_ID, id).each {
-            Node nodeFound ->
-            node = nodeFound
-        }
-        return node;
-    }   
     
-    def loadPart(List<Person> people) {
+    def loadPeople(def people) {
         println "Loading people"
         beginTransaction()
         people.each() {
@@ -70,5 +51,25 @@ class PersonNeo4JLoader extends Neo4JLoader{
         commitTransaction()        
         println "Transaction commited"
     } 
+    
+    def createRelationships(def people) {
+        beginTransaction()
+        while(!people.empty) {
+            Person p = people.removeFirst();
+            if(p.id % 10000 == 0) {
+                commitTransaction();
+                beginTransaction();
+            }
+            def nodePerson = map.get(p.id)
+            if(p.id%100==0)
+                println "Create relationship for person ${p.id}"
+            p.friends.each() {
+                Long friendId ->
+                def nodeFriend = map.get(friendId)
+                nodePerson.createRelationshipTo(nodeFriend, Neo4JRegistry$RelationPersonne.FRIEND_OF)
+            }
+        }
+        commitTransaction()
+    }
 }
 

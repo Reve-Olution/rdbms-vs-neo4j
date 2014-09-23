@@ -6,7 +6,7 @@ import ch.waterbead.loader.FileLoader;
 
 class PersonGenerator {
     def generate() {
-        def people = []
+        LinkedList people = [] as LinkedList;
         List firstnames = FileLoader.load(Config.FILE_FIRST_NAMES)
         def nbPeople = firstnames.size()
 
@@ -38,8 +38,6 @@ class PersonGenerator {
     
     def addCustomFriend(Person person, int nbPeople) {
         int randomIdPeople = RandomGenerator.getForIndexOf0(nbPeople)
-        Person friend = new Person(id : randomIdPeople)
-        person.addFriend(friend)
+        person.addFriend(randomIdPeople)
     }
 }
-

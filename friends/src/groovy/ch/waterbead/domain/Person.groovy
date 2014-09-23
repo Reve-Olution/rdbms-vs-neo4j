@@ -3,10 +3,10 @@ package ch.waterbead.domain
 class Person {
     long id;
     String name;
-    List<Person> friends = [];
+    List<Long> friends = [];
     
-    def addFriend(Person person) {
-        friends.add(person)
+    def addFriend(Long idFriend) {
+        friends.add(idFriend)
     }
 }
 
