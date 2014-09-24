@@ -39,7 +39,6 @@ class Neo4JConnectionManager {
         if(graphDb!=null)
           throw new IllegalAccessError("initGraphDatabase already called")
         graphDb = BatchInserters.batchDatabase(neo4JPath);
-        BatchInserters.ba
             //graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(neo4JPath)
     }
 }

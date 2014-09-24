@@ -14,9 +14,9 @@ import org.neo4j.graphdb.schema.Schema
 class PersonNeo4JLoader extends Neo4JLoader{
     Map<Long, Node>  map = [:]
     
-    def load(def people) {       
-        loadPeople(people);
-        loadFriends(people);
+    def load(def people, int nbFriendsToGenerate) {       
+        loadPeople(people)
+        loadFriends(people, nbFriendsToGenerate)
     }
     
     def loadPeople(def people) {
@@ -31,17 +31,17 @@ class PersonNeo4JLoader extends Neo4JLoader{
         println "People loaded"
     } 
     
-    def loadFriends(def people)  {
-        def peopleToGenerate = people.size()
+        def loadFriends(def people, int nbFriendsToGenerate)  {
+        int nbPeople = people.size()
+        println "Loading friends"
         people.each() {
             Person p ->
             if(p.id % 1000 == 0) {
-                println "commit friends ${p.id}/${peopleToGenerate}"
+                println "commit friends ${p.id}/${nbPeople}"
             }
             Node nodePerson = map.get(p.id)
-            Config.NB_FRIENDS.times() {
-                //Pick a random people among the list
-                long friendId = RandomGenerator.getForIndexOf0(peopleToGenerate)
+            nbFriendsToGenerate.times() {
+                long friendId = RandomGenerator.getForIndexOf0(nbPeople)
                 Node nodeFriend = map.get(friendId)
                 createRelationship(nodePerson, nodeFriend)
             }

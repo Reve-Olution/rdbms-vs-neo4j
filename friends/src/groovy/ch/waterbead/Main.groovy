@@ -13,12 +13,12 @@ file.deleteDir();
 
 ConfigLoader.load()
 
-def personGenerator = new PersonGenerator()
+def personGenerator = new PersonGenerator(Config.FILE_FIRST_NAMES)
 def personNeo4JLoader = new PersonNeo4JLoader();
 ConstraintsNeo4JLoader constraintNeo4JLoader = new ConstraintsNeo4JLoader();
 
 def personnes = personGenerator.generate(Config.population)
-personNeo4JLoader.load(personnes)
+personNeo4JLoader.load(personnes, Config.NB_FRIENDS)
 
 //constraintNeo4JLoader.addConstraints();
 
