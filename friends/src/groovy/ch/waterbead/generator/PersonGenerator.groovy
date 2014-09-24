@@ -5,16 +5,16 @@ import ch.waterbead.domain.Person
 import ch.waterbead.loader.FileLoader;
 
 class PersonGenerator {
-    def generate() {
-        LinkedList people = [] as LinkedList;
+    def generate(int number) {
+        def people = [];
         List firstnames = FileLoader.load(Config.FILE_FIRST_NAMES)
         def nbPeople = firstnames.size()
 
-        Config.population.times() {
+        number.times() {
             id ->
-            int newId = id + 1;
+            def firstId = id + 1;
             int randomName = RandomGenerator.get(nbPeople)
-            Person person = new Person(id : newId, name : firstnames[randomName])
+            Person person = new Person(id : firstId, name : firstnames[randomName])
             people.add(person)
         }
         println "People generated"
