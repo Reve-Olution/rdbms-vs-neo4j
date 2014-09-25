@@ -23,10 +23,11 @@ class PersonNeo4JLoader extends Neo4JLoader{
         println "Loading people"
         people.each() {
             Person p->
-            Node node = graphDb.createNode(Neo4JRegistry.LABEL_PERSONNE)
-            node.setProperty(Neo4JRegistry.PROPERTY_PERSONNE_ID, p.id);
-            node.setProperty(Neo4JRegistry.PROPERTY_PERSONNE_LASTNAME, p.name);
-            map.put(p.id, node);
+            Map<String, Object> properties = [:];
+            properties.put(Neo4JRegistry.PROPERTY_PERSONNE_ID, p.id)
+            properties.put(Neo4JRegistry.PROPERTY_PERSONNE_LASTNAME, p.name)
+            long personNodeId = batchInserter.createNode(properties,Neo4JRegistry.LABEL_PERSONNE)
+            map.put(p.id, personNodeId);
         }
         println "People loaded"
     } 
@@ -39,17 +40,13 @@ class PersonNeo4JLoader extends Neo4JLoader{
             if(p.id % 1000 == 0) {
                 println "commit friends ${p.id}/${nbPeople}"
             }
-            Node nodePerson = map.get(p.id)
+            long nodePerson = map.get(p.id)
             nbFriendsToGenerate.times() {
                 long friendId = RandomGenerator.getForIndexOf0(nbPeople)
-                Node nodeFriend = map.get(friendId)
-                createRelationship(nodePerson, nodeFriend)
+                long nodeFriend = map.get(friendId)
+                batchInserter.createRelationship(nodePerson, nodeFriend, Neo4JRegistry$RelationPersonne.FRIEND_OF, null)
             }
         }
-    }
-    
-    private createRelationship(Node nodePerson, Node nodeFriend) {
-        nodePerson.createRelationshipTo(nodeFriend, Neo4JRegistry$RelationPersonne.FRIEND_OF)
     }
 }
 
