@@ -12,30 +12,12 @@ class Cleaner  {
     def static tablesToClean = ["EMPLOYES_GROUPES","EMPLOYES_COMPETENCES","EMPLOYES_PROJETS","EMPLOYES","GROUPES","COMPETENCES","PROJETS"]
     def static clean() {
         Sql sql = ConnectionManager.getSql()
-            
-        tablesToClean.each() {
-            table->
-            try {
-                sql.execute("DROP TABLE " + table)
-            } catch(SQLException ex) {
-                println ex.message;
-            }
-        }
-        
-        executeScript(sql, FILE_TABLES);
+        SQLUtil.dropTables(sql, tablesToClean)
+        SQLUtil.runScript(sql, FILE_TABLES)
     }
     
     def static addConstraints() {
         Sql sql = ConnectionManager.getSql()
-        executeScript(sql, FILE_CONSTRAINTS)
-    }
-    
-    def static executeScript(Sql sql, String fileName) {
-        ScriptRunner sr = new ScriptRunner(sql.connection);
-        def file = ClassLoader.getSystemResource(fileName)
-        file.withReader() {
-            reader -> sr.runScript(reader);
-        }
+        SQLUtil.runScript(sql, FILE_CONSTRAINTS)
     }
 }
-

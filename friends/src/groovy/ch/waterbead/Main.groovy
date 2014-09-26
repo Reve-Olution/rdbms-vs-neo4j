@@ -8,20 +8,29 @@ import ch.waterbead.config.Config
 import ch.waterbead.neo4jloader.PersonNeo4JLoader
 import ch.waterbead.neo4jloader.Neo4JConnectionManager
 
-File file = new File("/home/geiser/test.db");
+def config = ConfigLoader.load()
+
+File file = new File(config.neo4j.path);
 file.deleteDir();
 
-ConfigLoader.load()
 
 def personGenerator = new PersonGenerator(Config.FILE_FIRST_NAMES)
-def personNeo4JLoader = new PersonNeo4JLoader();
-ConstraintsNeo4JLoader constraintNeo4JLoader = new ConstraintsNeo4JLoader();
 
-def personnes = personGenerator.generate(Config.population)
-personNeo4JLoader.load(personnes, Config.NB_FRIENDS)
-
-//constraintNeo4JLoader.addConstraints();
+def personnes = personGenerator.generate(config.population)
 
 
-Neo4JConnectionManager.finish();
+if(config.neo4j.path) {
+    Neo4JConnectionManager.initGraphDatabase(config.neo4j.path)
+    def personNeo4JLoader = new PersonNeo4JLoader();
+    def constraintNeo4JLoader = new ConstraintsNeo4JLoader();
+    personNeo4JLoader.load(personnes, config.numberOfFriends)
+    constraintNeo4JLoader.addConstraints();
+    Neo4JConnectionManager.finish();
+}
+
+if(config.rdbms.url) {
+}
+
+
+
 

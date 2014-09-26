@@ -2,7 +2,6 @@ apply plugin: 'groovy'
 apply plugin: 'application'
 
 mainClassName = 'ch.waterbead.Main'
-mainClass = 'ch.waterbead.Main'
 
 applicationDefaultJvmArgs = ["-Xmx4G","-Xms256m"]
 
