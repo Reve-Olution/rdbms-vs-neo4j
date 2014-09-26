@@ -2,86 +2,55 @@ package ch.waterbead.config
 
 import ch.waterbead.neo4jloader.Neo4JConnectionManager
 import ch.waterbead.sqlloader.ConnectionManager
+import groovy.util.ConfigSlurper
+
 
 class ConfigLoader {
-    /** Generation parameters */
-    static int population = 1000;
-    
-    /** Flags that determine which databases have to be populated */
-    static boolean mustNeo4JPopulated = false
-    static boolean mustRDBMSPopulated = false;
-    
-    static final RDBMS_USER = "rdbmsUser"
-    static final RDBMS_PASSWORD = "rdbmsPassword"
-    static final RDBMS_URL = "rdbmsUrl"
-    static final RDBMS_DRIVER = "rdbmsDriver"
-    
-    static final NEO4J_PATH = "neo4jPath"
-    
-    static final POPULATION = "population"
-    
+    static final BASE_CONFIG_PROPERTIES = "config/base_config.properties"
     static final CONFIG_PROPERTIES = "config.properties"
     
-    static final DOCUMENTATION = "http://localhost.ch"
+    static final DOCUMENTATION = "https://github.com/Reve-Olution/RDBMS-vs-Neo4J"
     
     static def load() {
-        Properties properties = new Properties()
-        File file = new File(CONFIG_PROPERTIES)
-        String configPath = file.absolutePath
-        String currentDirectory = new File("").absolutePath
+        File configProperties = new File(CONFIG_PROPERTIES)
+        def url = getClassLoader().getSystemResource(BASE_CONFIG_PROPERTIES)
+        def baseConfig = new ConfigSlurper().parse(url)
+        def config = null;
         
-        if(!file.exists()) {
-            println("No ${CONFIG_PROPERTIES} defined on the directory ${configPath}. Do not forget to create it and rerun the application according to the documentation")
-            println("Documentation location ${DOCUMENTATION}")
+        String currentDirectory = new File(".").canonicalPath
+        
+        if(!configProperties.exists()) {
+            println "No ${CONFIG_PROPERTIES} defined on the directory ${currentDirectory}. Do not forget to create it and rerun the application according to the documentation"
+            println("Documentation location : ${DOCUMENTATION}")
             quit()
         } else {
-            println('Loading poperties from ' + configPath)
-                file.withInputStream() {
-                    is -> properties.load(is)
-                }
+            println "Configuration loaded from ${currentDirectory}${CONFIG_PROPERTIES}"
+            def userConfig = new ConfigSlurper().parse(configProperties.toURL())
+            config = baseConfig.merge(userConfig);
         }
 
-        def rdbmsUrl = properties.get(RDBMS_URL)
-        def rdbmsUser = properties.get(RDBMS_USER)
-        def rdbmsPassword = properties.get(RDBMS_PASSWORD)
-        def rdbmsDriver = properties.get(RDBMS_DRIVER)
-        def neo4jPath = properties.get(NEO4J_PATH)
-        def population = Integer.valueOf(properties.get(POPULATION))
-
-        if(!rdbmsUrl && !neo4jPath) {
-            println "Please defined an '${RDBMS_URL}' or/and a '${NEO4J_PATH}' on the config.properties"
+        if(!config.rdbms.url && !config.neo4j.path) {
+            println "Please defined an 'rdbms.url' or/and a 'neo4j.path' on the config.properties"
             quit()
         }
-        if(!rdbmsUrl) {
-            println "${RDBMS_URL} not defined, no RDBMS database is going to be popoulate"
-        } else {
-            mustRDBMSPopulated = true
-            initConnectionManager(rdbmsUrl, rdbmsUser, rdbmsPassword, rdbmsDriver)
+        
+        if(!config.rdbms.url) {
+            println "'rdbms.url' not defined, no RDBMS database is going to be populate"
         }
-        if(!neo4jPath) {
-            println "${NEO4J_PATH} not defined, no Neo4J database is going to be populate"
-        } else {
-            mustNeo4JPopulated = true
-            initGraphDaatabase(neo4jPath)
+        
+        if(!config.neo4j.path) {
+            println "'neo4j.path' not defined, no Neo4J database is going to be populate"
         }
 
-        if(!population) {
-            println "No '${POPULATION}' defined, the default value of ${population}  will be used"
-        } else {
-            population = population
+        if(!config.population) {
+            println "No 'population' defined, the default value of ${config.population}  will be used"
         }
+        
+        return config;
     }
     
     static def quit() {
         System.exit(0)
-    }
-    
-    static def initConnectionManager(def url, def user, def password, def driver) {
-        ConnectionManager.initSQL(url, user, password, driver)
-    }
-    
-    static def initGraphDaatabase(def neo4JPath) {
-        Neo4JConnectionManager.initGraphDatabase(neo4JPath)
     }
 }
 

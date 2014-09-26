@@ -9,10 +9,10 @@ class ConnectionManager {
         return sql;
     }
     
-    static synchronized initSQL(def url, def user, def password, def driver) {
+    static synchronized initSQL(def config) {
         if(sql!=null)
             throw new IllegalAccessException("Init SQL has already called")
-        sql = Sql.newInstance(url,user,password,driver)    
+        sql = Sql.newInstance(config.rdbms.url,config.rdbms.user,config.rdbms.password,config.rdbms.driver)    
         sql.getConnection().setAutoCommit(false);             
     }
 }
