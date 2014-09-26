@@ -9,20 +9,20 @@ class PersonSQLLoader extends SQLLoader {
         
 	def load(List<Person> personnes, int nbFriendsToGenerate) {
             sql.withBatch(SQL_PERSONNES) {
-                ps ->
+                psPerson ->
                 personnes.each() {
                     Person person ->
-                    ps.addBatch(id : person.id, nom: person.name) 
-                }
-            }
-            
-            sql.withBatch(SQL_FRIENDS) {
-                ps ->
-                personnes.each() {
-                    Person person ->
-                    nbFriendsToGenerate.times() {
-                        long friendId = RandomGenerator.getForIndexOf0()
-                        ps.addBatch(id_personnes1 : person.id, id_personnes2 : friendId)
+                    if(person.id % 10000 == 0) {    
+                        println "People generation : ${person.id}/${personnes.size()}"
+                    }
+                    psPerson.addBatch(id : person.id, nom: person.name) 
+                    
+                    sql.withBatch(SQL_FRIENDS) {
+                        psFriend ->
+                        nbFriendsToGenerate.times() {
+                            long friendId = RandomGenerator.getForIndexOf0(personnes.size())
+                            psFriend.addBatch(id_personnes1 : person.id, id_personnes2 : friendId)
+                        }
                     }
                 }
             }

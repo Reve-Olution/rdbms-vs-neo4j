@@ -3,7 +3,7 @@ apply plugin: 'application'
 
 mainClassName = 'ch.waterbead.Main'
 
-applicationDefaultJvmArgs = ["-Xmx4G","-Xms256m"]
+applicationDefaultJvmArgs = ["-Xmx3G","-Xms256m"]
 
 sourceCompatibility = '1.8'
 
