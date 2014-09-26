@@ -4,6 +4,9 @@ import org.neo4j.graphdb.DynamicLabel
 import org.neo4j.graphdb.Label
 import org.neo4j.graphdb.RelationshipType
 
+/**
+ * Registry which contains the labels, fields and relations that can be created
+*/
 class Neo4JRegistry {
 	   
     public static final EMPLOYE = "Employe"

@@ -11,16 +11,25 @@ import org.neo4j.graphdb.RelationshipType
 import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.schema.Schema
 
+/**
+ * Class that load groups into the graph database
+*/
 class GroupNeo4JLoader extends Neo4JLoader{
-    def load(List<Group> groups) {
-        beginTransaction()
+    /**
+     * Load a list of groups into the graph database and return a map that contains the group id 
+     * as a key and the created node id as a value.
+    */
+   Map<Long, Long> load(List<Group> groups) {
+       Map<Long, Long> groupsNodes = [:]
         groups.each() {
             Group g->
-            Node node = graphDb.createNode(Neo4JRegistry.LABEL_GROUP)
-            node.setProperty(Neo4JRegistry.PROPERTY_GROUP_ID, g.id);
-            node.setProperty(Neo4JRegistry.PROPERTY_GROUP_NAME, g.name);
+            def properties = [:]
+            properties.put(Neo4JRegistry.PROPERTY_GROUP_ID, g.id)
+            properties.put(Neo4JRegistry.PROPERTY_GROUP_NAME, g.name)
+            long groupNodeId = batchInserter.createNode(properties,Neo4JRegistry.LABEL_GROUP)
+            groupsNodes.put(g.id, groupNodeId)
         }
-        commitTransaction()
+        return groupsNodes;
     }
 }
 

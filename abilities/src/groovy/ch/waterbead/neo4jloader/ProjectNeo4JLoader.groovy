@@ -12,16 +12,25 @@ import org.neo4j.graphdb.RelationshipType
 import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.schema.Schema
 
+/**
+ * Class that load projects into the graphdatabase
+ **/
 class ProjectNeo4JLoader extends Neo4JLoader{
-    def load(List<Project> projects) {
-        beginTransaction()
+    /**
+     * Load a list of projects into the graph database and return a map 
+     * that contains the id of the project as a key and the id of the node as a value.
+    */
+    Map<Long, Long> load(List<Project> projects) {
+        Map<Long, Long>  projectsNodes = [:]
         projects.each() {
             Project p->
-            Node node = graphDb.createNode(Neo4JRegistry.LABEL_PROJECT)
-            node.setProperty(Neo4JRegistry.PROPERTY_GROUP_ID, p.id);
-            node.setProperty(Neo4JRegistry.PROPERTY_GROUP_NAME, p.name);
+            Map<String, Object> properties = [:]
+            properties.put(Neo4JRegistry.PROPERTY_GROUP_ID, p.id)
+            properties.put(Neo4JRegistry.PROPERTY_GROUP_NAME, p.name)
+            def projectNodeId = batchInserter.createNode(properties,Neo4JRegistry.LABEL_PROJECT)
+            projectsNodes.put(p.id, projectNodeId)
         }
-        commitTransaction()
+        return projectsNodes;
     }
 }
 

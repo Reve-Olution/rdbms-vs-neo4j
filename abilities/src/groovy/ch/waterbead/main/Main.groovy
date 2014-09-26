@@ -38,4 +38,5 @@ if(ConfigLoader.mustRDBMSPopulated) {
 }
 if(ConfigLoader.mustNeo4JPopulated) {
     GlobalNeo4Loader.load(abilities, projects, groups, employes)
+    Neo4JConnectionManager.finish();
 }

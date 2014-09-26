@@ -10,16 +10,26 @@ import org.neo4j.graphdb.RelationshipType
 import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.schema.Schema
 
+/**
+ * Class that load the abilities into the graph database
+*/
 class AbilityNeo4JLoader extends Neo4JLoader{
+    /**
+     * Load a list of abilities into the graph database and return a map which 
+     * contains the ability id as a key and the node created id as value.
+    */
     def load(List<Ability> abilities) {
-        beginTransaction()
+        Map<Long, Long> abilitiesNodes = [:]
         abilities.each() {
             Ability a->
-            Node node = graphDb.createNode(Neo4JRegistry.LABEL_ABILITY)
-            node.setProperty(Neo4JRegistry.PROPERTY_ABILITY_ID, a.id);
-            node.setProperty(Neo4JRegistry.PROPERTY_ABILITY_NAME, a.name);
+            Map properties = [:]    
+            properties.put(Neo4JRegistry.PROPERTY_ABILITY_ID, a.id)
+            properties.put(Neo4JRegistry.PROPERTY_ABILITY_NAME, a.name)
+            long abilityNodeId = batchInserter.createNode(properties,Neo4JRegistry.LABEL_ABILITY)
+            abilitiesNodes.put(a.id, abilityNodeId)
+            
         }
-        commitTransaction()
+        return abilitiesNodes;
     }
 }
 

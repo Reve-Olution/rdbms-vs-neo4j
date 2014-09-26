@@ -3,7 +3,7 @@ package ch.waterbead.config
 class Config {
     static final DEBUG = true;
     
-    static final int population = 10;
+    static final int population = 100000;
     
     /** Population files */
     static final String FILE_FIRST_NAMES = 'firstnames.csv'
