@@ -12,9 +12,6 @@ class GroupSQLLoader extends SQLLoader {
             ps ->
             groups.each() {
                 Group g ->
-                if(Config.DEBUG) {
-                    println g.id + " " + g.name
-                }
                 ps.addBatch(id : g.id, nom : g.name)
             }
         }

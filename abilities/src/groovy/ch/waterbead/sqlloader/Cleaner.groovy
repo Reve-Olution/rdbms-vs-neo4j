@@ -6,14 +6,13 @@ import java.sql.SQLException
 import org.apache.ibatis.jdbc.ScriptRunner
 
 class Cleaner  {
+    def static final FILE_TABLES = "rdbms/tables"
+    def static final FILE_CONSTRAINTS = "rdbms/constraints"
+    
     def static tablesToClean = ["EMPLOYES_GROUPES","EMPLOYES_COMPETENCES","EMPLOYES_PROJETS","EMPLOYES","GROUPES","COMPETENCES","PROJETS"]
     def static clean() {
         Sql sql = ConnectionManager.getSql()
             
-        if(Config.DEBUG) {
-            println("Cleaning tables")
-        }
-        
         tablesToClean.each() {
             table->
             try {
@@ -22,15 +21,20 @@ class Cleaner  {
                 println ex.message;
             }
         }
-            
+        
+        executeScript(sql, FILE_TABLES);
+    }
+    
+    def static addConstraints() {
+        Sql sql = ConnectionManager.getSql()
+        executeScript(sql, FILE_CONSTRAINTS)
+    }
+    
+    def static executeScript(Sql sql, String fileName) {
         ScriptRunner sr = new ScriptRunner(sql.connection);
-        def file = ClassLoader.getSystemResource("rdbms/ddl")
+        def file = ClassLoader.getSystemResource(fileName)
         file.withReader() {
             reader -> sr.runScript(reader);
-        }
-            
-        if(Config.DEBUG) {
-            println("Tables cleaned")
         }
     }
 }

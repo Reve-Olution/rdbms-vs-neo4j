@@ -12,9 +12,6 @@ class AbilitySQLLoader extends SQLLoader {
             ps ->
             abilities.each() {
                 Ability a ->
-                if(Config.DEBUG) {
-                    println a.id + " " + a.name
-                }
                 ps.addBatch(id : a.id, nom : a.name)
             }
         }

@@ -14,13 +14,13 @@ class EmployeSQLLoader extends SQLLoader {
     private static final SQL_EMPLOYES_GROUPES = "INSERT INTO EMPLOYES_GROUPES (idEmploye, idGroupe) VALUES (:idEmploye, :idGroupe)"
     private static final SQL_EMPLOYES_PROJETS = "INSERT INTO EMPLOYES_PROJETS (idEmploye, idProjet) VALUES (:idEmploye, idProjet)"
     def load(List<Employe> people) {
-        sql.withBatch(1,SQL_EMPLOYES) {
+        sql.withBatch(SQL_EMPLOYES) {
             ps ->
             people.each() {
                 Employe p ->
                 
-                if(Config.DEBUG) {
-                    println p.id + ' ' + p.lastname
+                if(p.id % 10000 == 0) {
+                    println "${p.id}/${people.size()}"
                 }
                 ps.addBatch(id: p.id, nom: p.lastname, prenom: p.firstname, anneenaissance: p.yearOfBirthDay)
 
@@ -47,7 +47,6 @@ class EmployeSQLLoader extends SQLLoader {
                         psGroups.addBatch(idEmploye : p.id, idGroupe : group.id)
                     }
                 }
-                
             }
         }
     }

@@ -15,6 +15,9 @@ class GlobalSQLLoader {
         eloader.load(employes)
         
         ConnectionManager.sql.connection.commit()
+        
+        Cleaner.addConstraints();
+        
     }
 }
 

@@ -45,7 +45,6 @@ class EmployeNeo4JLoader extends Neo4JLoader {
             e.groups.each() {
                 Group g ->
                     long nodeGroupId = groupsNodes.get(g.id)
-                    println "${nodeEmployeId} ${g.id}"
                     batchInserter.createRelationship(nodeEmployeId, nodeGroupId, Neo4JRegistry$RelationEmployes.TAKE_PART, null)
             }
            

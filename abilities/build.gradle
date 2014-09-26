@@ -1,10 +1,9 @@
-apply plugin: 'application'
 apply plugin: 'groovy'
+apply plugin: 'application'
 
 sourceCompatibility = '1.8'
 
-mainClassName = "ch.waterbead.main.Main"
-mainClass = "ch.waterbead.main.Main"
+mainClassName = 'ch.waterbead.main.Main'
 
 repositories {
     mavenCentral()
@@ -14,6 +13,7 @@ dependencies {
     compile project(':common')
     compile 'org.neo4j:neo4j:2.1.2'
     compile 'org.mybatis:mybatis:3.2.7'
+    compile 'org.mariadb.jdbc:mariadb-java-client:1.1.7'
     compile localGroovy()
 }
 

@@ -12,9 +12,6 @@ class ProjectSQLLoader extends SQLLoader {
             ps ->
             projects.each() {
                 Project p ->
-                if(Config.DEBUG) {
-                    println p.id + " " + p.name
-                }
                 ps.addBatch(id : p.id, nom : p.name)
             }
         }

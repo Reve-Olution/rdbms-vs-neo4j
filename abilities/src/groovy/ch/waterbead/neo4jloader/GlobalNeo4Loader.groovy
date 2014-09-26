@@ -11,6 +11,7 @@ class GlobalNeo4Loader {
         ProjectNeo4JLoader ploader = new ProjectNeo4JLoader()
         GroupNeo4JLoader gloader = new GroupNeo4JLoader()
         CustomNeo4JLoader cloader = new CustomNeo4JLoader();
+        
         def abilitiesNodes = aloader.load(abilities)
         def projectsNodes = ploader.load(projects)
         def groupsNodes = gloader.load(groups)     
@@ -19,7 +20,7 @@ class GlobalNeo4Loader {
         EmployeNeo4JLoader eloader = new EmployeNeo4JLoader(groupsNodes, projectsNodes, abilitiesNodes)
         eloader.load(employes)
         
-        //cloader.addConstraints()
+        cloader.addConstraints()
     }
 }
 

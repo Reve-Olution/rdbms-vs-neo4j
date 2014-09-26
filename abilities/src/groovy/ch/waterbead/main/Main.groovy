@@ -21,22 +21,24 @@ import ch.waterbead.sqlloader.Cleaner
 import ch.waterbead.sqlloader.GlobalSQLLoader
 import groovy.sql.Sql
 
-ConfigLoader.load();
+def config = ConfigLoader.load();
 
 AbilityGenerator ag = new AbilityGenerator()
 ProjectGenerator pg = new ProjectGenerator()
 GroupGenerator gg = new GroupGenerator()
-EmployeGenerator eg = new EmployeGenerator()
+EmployeGenerator eg = new EmployeGenerator(config)
 
 def abilities = ag.generate()
 def projects = pg.generate()
 def groups = gg.generate()
 def employes = eg.generate()
 
-if(ConfigLoader.mustRDBMSPopulated) {
+if(config.rdbms.url) {
+    ConnectionManager.initSQL(config)
     GlobalSQLLoader.load(abilities, projects, groups, employes)
 }
-if(ConfigLoader.mustNeo4JPopulated) {
+if(config.neo4j.path) {
+    Neo4JConnectionManager.initGraphDatabase(config.neo4j.path)
     GlobalNeo4Loader.load(abilities, projects, groups, employes)
     Neo4JConnectionManager.finish();
 }

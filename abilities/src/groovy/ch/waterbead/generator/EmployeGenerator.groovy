@@ -5,6 +5,11 @@ import ch.waterbead.domain.Employe
 import ch.waterbead.loader.FileLoader
 
 class EmployeGenerator implements Generator<Employe> {
+    private def config;
+    
+    EmployeGenerator(def config) {
+        this.config = config;
+    }
     @Override
     public List generate() {
         List employes = []
@@ -14,7 +19,7 @@ class EmployeGenerator implements Generator<Employe> {
         List groups = FileLoader.load(Config.FILE_GROUPS)
         List projects = FileLoader.load(Config.FILE_PROJECTS)
 
-        Config.population.times {
+        config.population.times {
             no ->
             
             int id = no+1
